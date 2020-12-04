@@ -193,3 +193,14 @@ other = "CHANGED"
 [deleted]
 other = "DELETED"
 # === shortcodes/version.html ===
+
+# partials/footer.html 
+[penname]
+other = 'YaoLang'
+
+[license]
+other = "CC BY-NC-SA 4.0"
+
+[worktime]
+other = "Almost time days."
+# === partials/footer.html ===

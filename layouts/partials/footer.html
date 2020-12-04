@@ -7,10 +7,22 @@
                     {{- safeHTML . -}}
                 </div>
             {{- end -}}
-
+            
             {{- /* Hugo and LoveIt */ -}}
             {{- if ne .Site.Params.footer.hugo false -}}
                 <div class="footer-line">
+                    <span id="timeDate">{{ T "worktime" }}&nbsp;|&nbsp;</span>
+                    <script>
+                        var now = new Date();
+                        function createtime() {
+                            var start_time= new Date("09/16/2020 00:00:00");
+                            now.setTime(now.getTime()+250);
+                            days = (now - start_time ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+                            var worktime = document.getElementById("timeDate").innerHTML.replace(/time/, Math.floor(days));
+                            document.getElementById("timeDate").innerHTML = worktime ;
+                        }
+                        createtime();
+                    </script>
                     {{- $hugo := printf `<a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo %v">Hugo</a>` hugo.Version -}}
                     {{- $theme := .Scratch.Get "version" | printf `<a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt %v"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>` -}}
                     {{- dict "Hugo" $hugo "Theme" $theme | T "poweredBySome" | safeHTML }}
@@ -32,12 +44,12 @@
 
                 {{- /* Author */ -}}
                 {{- if ne .Site.Params.footer.author false -}}
-                    <span class="author" itemprop="copyrightHolder">&nbsp;<a href="{{ $.Site.Author.link | default .Site.Home.RelPermalink }}" target="_blank">{{ .Site.Author.name }}</a></span>
+                    <span class="author" itemprop="copyrightHolder">&nbsp;<a href="{{ $.Site.Author.link | default .Site.Home.RelPermalink }}" target="_blank">{{ T "penname" }}</a></span>
                 {{- end -}}
 
                 {{- /* License */ -}}
                 {{- with .Site.Params.footer.license -}}
-                    &nbsp;|&nbsp;<span class="license">{{ . | safeHTML }}</span>
+                    &nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" target="_blank" href="{{ . | safeHTML }}">{{ T "license" }}</a></span>
                 {{- end -}}
 
                 {{- /* ICP */ -}}

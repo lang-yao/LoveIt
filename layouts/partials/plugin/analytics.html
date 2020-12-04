@@ -9,6 +9,20 @@
         </script>
         {{- printf "https://www.googletagmanager.com/gtag/js?id=%v" . | dict "Async" true "Source" | partial "plugin/script.html" -}}
     {{- end -}}
+    
+    {{- /* baidu Analytics */ -}}
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?9c04b6d35915817e67da8ad2fdcfbfdf";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    {{- /* 51la Analytics */ -}}
+    <script type="text/javascript" src="//js.users.51.la/21009067.js"></script>
+
 
     {{- /* Fathom Analytics */ -}}
     {{- with $analytics.fathom.id -}}
