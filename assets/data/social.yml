@@ -4,7 +4,7 @@ github:
   Prefix: https://github.com/
   Title: GitHub
   Icon:
-    Class: fab fa-github-alt fa-fw
+    Class: fab fa-github fa-fw
 
 # 002: LinkedIn
 linkedin:
@@ -509,3 +509,19 @@ rss:
   Newtab: true
   Icon:
     Class: fas fa-rss fa-fw
+
+# 064: RSS
+wechat:
+  Weight: 2
+  Title: 公众号
+  Newtab: true
+  Icon:
+    Simpleicons: wechat
+
+# 063: Thingiverse
+cnblog:
+  Weight: 1
+  Prefix: https://www.cnblogs.com/
+  Title: 博客园
+  Icon:
+    Src: svg/icons/cnblog.svg

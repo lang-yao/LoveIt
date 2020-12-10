@@ -209,3 +209,9 @@ other = "知识共享署名-非商业性使用-相同方式共享 4.0 国际许�
 [worktime]
 other = "运行 time 天"
 # === partials/footer.html ===
+
+# === default/section.html ===
+[totalPageNums]
+other = "共 {{ .Nums }} 篇文章"
+
+# === _default/section.html ===

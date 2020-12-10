@@ -8,6 +8,10 @@
         <h2 class="single-title animated pulse faster">
             {{- .Params.Title | default (T .Section) | default .Section | dict "Some" | T "allSome" -}}
         </h2>
+        <!-- articles -->
+        <span style="font-size:.8rem;font-weight:500;">
+           {{- len ( where .Site.RegularPages "Section" "posts" ) | dict "Nums" | T "totalPageNums" -}}
+        </span>
 
         {{- /* Paginate */ -}}
         {{- if .Pages -}}

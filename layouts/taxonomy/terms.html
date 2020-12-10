@@ -12,7 +12,7 @@
         <h2 class="single-title animated pulse faster">
             {{- .Params.Title | default (T $taxonomies) | default $taxonomies | dict "Some" | T "allSome" -}}
         </h2>
-
+        
         {{- /* Categories Page */ -}}
         {{- if eq $taxonomies "categories" -}}
             <div class="categories-card">

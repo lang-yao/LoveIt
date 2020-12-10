@@ -15,7 +15,8 @@
                         <span id="{{ $id }}" class="typeit"></span>
                         {{- dict $id (slice $id) | dict "typeitMap" | merge ($.Scratch.Get "this") | $.Scratch.Set "this" -}}
                     {{- else -}}
-                        {{- .name -}}
+                        {{- /* support multilanguages .name */ -}}
+                        {{- $.Site.Title -}}
                     {{- end -}}
                     {{- with .post -}}
                         <span class="header-title-post">{{ . | safeHTML }}</span>
@@ -25,22 +26,45 @@
                 {{- end -}}
             </a>
         </div>
-        <div class="menu">
+        <div class="menu" style="overflow: visible">
             <div class="menu-inner">
                 {{- range .Site.Menus.main -}}
-                    {{- $url := .URL | relLangURL -}}
-                    {{- with .Page -}}
-                        {{- $url = .RelPermalink -}}
-                    {{- end -}}
-                    <a class="menu-item{{ if $.IsMenuCurrent `main` . | or ($.HasMenuCurrent `main` .) | or (eq $.RelPermalink $url) }} active{{ end }}" href="{{ $url }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>
-                        {{- .Pre | safeHTML }} {{ .Name }} {{ .Post | safeHTML -}}
-                    </a>
+
+                    {{- /* MultiMenus */ -}}
+                    {{ if .HasChildren }}
+                        <div class="dropdown menu-item">
+                          <a class="btn" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ .Name }}</a>
+                          <div class="dropdown-menu" style="display: none;">
+                            {{ range .Children }}
+                                {{- $url := .URL | relLangURL -}}
+                                {{- with .Page -}}
+                                    {{- $url = .RelPermalink -}}
+                                {{- end -}}
+                                <a class="dropdown-item" href="{{ $url }}" {{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>{{- .Pre | safeHTML }} {{ .Name }} {{ .Post | safeHTML -}}</a>
+                            {{ end }}
+                          </div>
+                        </div>                       
+                    {{ else }}
+                        {{- $url := .URL | relLangURL -}}
+                        {{- with .Page -}}
+                            {{- $url = .RelPermalink -}}
+                        {{- end -}}
+                        <a class="menu-item{{ if $.IsMenuCurrent `main` . | or ($.HasMenuCurrent `main` .) | or (eq $.RelPermalink $url) }} active {{ end }}" href="{{ $url }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>
+                            {{- .Pre | safeHTML }}{{ .Name }}{{ .Post | safeHTML -}}
+                        </a>
+                    {{ end }}
                 {{- end -}}
                 {{- if .Site.Menus.main -}}
                     <span class="menu-item delimiter"></span>
                 {{- end -}}
                 {{- if .Site.IsMultiLingual -}}
-                    <a href="javascript:void(0);" class="menu-item language" title="{{ T "selectLanguage" }}">
+                
+                	{{- /* change languages */ -}}
+                	{{ range where .AllTranslations ".Lang" "ne" $.Lang }}
+	                	<a href="{{ .RelPermalink }}" class="menu-item " title="{{ .Language.LanguageName }}"><i class="fas fa-language fa-fw"></i>
+	                </a>
+	                {{ end }}
+                   <!--   <a href="javascript:void(0);" class="menu-item language" title="{{ T "selectLanguage" }}">
                         {{- .Language.LanguageName -}}
                         <i class="fas fa-chevron-right fa-fw"></i>
                         <select class="language-select" id="language-select-desktop" onchange="location = this.value;">
@@ -59,8 +83,8 @@
                                     </option>
                                 {{- end -}}
                             {{- end -}}
-                        </select>
-                    </a>
+                        </select> 
+                    </a> -->
                 {{- end -}}
                 {{- if .Site.Params.search.enable -}}
                     <span class="menu-item search" id="search-desktop">
