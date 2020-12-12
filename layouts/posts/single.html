@@ -1,6 +1,15 @@
 {{- define "title" }}{{ .Title }} - {{ .Site.Title }}{{ end -}}
 
 {{- define "content" -}}
+{{- /* 引入文章界面的css */ -}}
+{{- $fingerprint := .Scratch.Get "fingerprint" -}}
+{{- $source := ( resources.Get "css/post-single.css" ) -}}
+{{- dict "Source" $source "Fingerprint" $fingerprint | dict "Scratch" $.Scratch "Data" | partial "scratch/style.html" -}}
+{{- range (.Scratch.Get "this").style -}}
+    {{- partial "plugin/style.html" . -}}
+{{- end -}}
+{{- .Scratch.Delete "this" -}}
+
     {{- $params := .Scratch.Get "params" -}}
 
     {{- $toc := $params.toc -}}
@@ -30,7 +39,7 @@
         {{- /* Meta */ -}}
         <div class="post-meta">
             <div class="post-meta-line">
-                {{- $author := $params.author | default .Site.Author.name | default (T "author") -}}
+                {{- $author := T "penname" | default .Site.Author.name | default (T "author") -}}
                 {{- $authorLink := $params.authorlink | default .Site.Author.link | default .Site.Home.RelPermalink -}}
                 <span class="post-author">
                     {{- $options := dict "Class" "author" "Destination" $authorLink "Title" "Author" "Rel" "author" "Icon" (dict "Class" "fas fa-user-circle fa-fw") "Content" $author -}}
@@ -92,112 +101,68 @@
             {{- dict "Content" .Content "Ruby" $params.ruby "Fraction" $params.fraction "Fontawesome" $params.fontawesome | partial "function/content.html" | safeHTML -}}
             <hr>
             {{- /*custom bottom*/ -}}
-            <br>
-            <center>== END ==</center>
-            {{- /*see also*/ -}}
-                {{ $related := .Site.RegularPages.RelatedIndices . "tags" | first 5 }}
-                {{ with $related }}
-                <!-- <h3>See Also</h3> -->
-                <ul>
-                    {{ range . }}
-                    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
-                    {{ end }}
-                </ul>
-                {{ end }}
-            {{- /* sponsor */ -}}
-            <style type="text/css">
-                #QR {
-                    padding-top:20px;
-                }
-                #QR a {
-                    border:0
-                }
-                #QR img {
-                    width:180px;
-                    max-width:100%;
-                    display:inline-block;
-                    margin:.8em 2em 0 2em
-                }
-                #rewardButton {
-                    font-size: 14px;
-                    border:1px solid #ec7259;
-                    text-align:center;
-                    height:36px;
-                    display:block;
-                    border-radius:4px;
-                    -webkit-transition-duration:.4s;
-                    transition-duration:.4s;
-                    background-color:#ec7259;
-                    color:#fff;
-                    margin:0 auto;
-                    padding:0 25px;
-                    cursor: pointer;
-                    outline: none;
-                }
-                #rewardButton:hover {
-                    color:#fff;
-                    border-color:#fff; 
-                }
+            <center>- {{- T "articleEnd" -}} -</center>
 
-            </style>
-            <br>
-                <div style="text-align:center;margin-bottom:30px;">
-    <h5 style="font-weight:600;margin-bottom:10px;">「&nbsp;感谢支持&nbsp;」</h5>
-    <button id="rewardButton"><span>赞赏</span></button>
-    <div id="QR" style="display: none;">
-        <div id="wechat" style="display:inline-block">
-            <a class="fancybox" rel="group">
-                <img id="wechat_qr" src="{{ .Site.Data.imgURL.weichatPay }}" alt="WeChat Pay"></a>
-            <h5 style="font-weight:600;margin-top:5px;">微信赞赏</h5>
-        </div>
-        <div id="alipay" style="display: inline-block">
-            <a class="fancybox" rel="group">
-                <img id="alipay_qr" src="{{ .Site.Data.imgURL.alipay }}" alt="Alipay"></a>
-            <h5 style="font-weight:600;margin-top:5px;">支付宝赞赏</h5>
-        </div>
-    </div>
-</div>          
-<script type="text/javascript">
-    if ($('#rewardButton')[0]) {
-        $("#rewardButton").on("click", function() {
-           var qr = document.getElementById('QR'); 
-           if (qr.style.display === 'none') {$("#QR").slideDown();} else {$("#QR").slideUp();}
-        });
-    }
-</script>
-            <br>
+            {{- /*see also*/ -}}           
+            {{ $related := .Site.RegularPages.RelatedIndices . "tags" | first 5 }}
+            {{ with $related }}
+                <div id="related-article">
+                    <p>{{- T "seeAlso" -}}</p>
+                    <ul>
+                        {{ range . }}
+                        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+                        {{ end }}
+                    </ul>
+                </div>
+            {{ end }}
+
+            {{- /* sponsor */ -}}
+            <div style="text-align:center;margin-bottom:30px;">
+                <h5 style="font-weight:600;margin-bottom:10px;">「&nbsp;{{- T "thanksSponsor" -}}&nbsp;」</h5>
+                <button id="rewardButton"><span>{{- T "tips" -}}</span></button>
+                <div id="QR" style="display: none;">
+                    <div id="wechat" style="display:inline-block">
+                        <a class="fancybox" rel="group">
+                            <img id="wechat_qr" src="{{ .Site.Data.imgURL.weichatPay }}" alt="WeChat Pay"></a>
+                        <h5 style="font-weight:600;margin-top:5px;">{{- T "weichatTip" -}}</h5>
+                    </div>
+                    <div id="alipay" style="display: inline-block">
+                        <a class="fancybox" rel="group">
+                            <img id="alipay_qr" src="{{ .Site.Data.imgURL.alipay }}" alt="Alipay"></a>
+                        <h5 style="font-weight:600;margin-top:5px;">{{- T "aliTip" -}}</h5>
+                    </div>
+                </div>
+            </div>
+
             {{- /*copyright*/ -}}
-            <style type="text/css">
-                .post-copyright {
-                    border-top: 1px solid #e8e8e8;
-                    border-bottom: 1px solid #e8e8e8;
-                    padding: 0.5em 1em;
-                    border-left: 2px solid #ff1700;
-                    background-color: #f9f9f9;
-                    line-height:1.6;
-                }
-                .post-copyright strong {
-                    font-weight: 600;
-                }
-                .post-copyright li {
-                    list-style: none;
-                }
-                .post-copyright a {
-                    color: #2d96bd;
-                }
-            </style>
-            <ul class="post-copyright">
-                <li class="post-copyright-author">
-                    <strong>本文作者：</strong><a href="{{ $.Site.Author.link | default .Site.Home.RelPermalink }}" target="_blank">{{ T "penname" }}</a>
-                </li>
-                <li class="post-copyright-link">
-                    <strong>文章链接：</strong><a href="#" target="_blank" title="{{ .Title }}">{{- .Permalink | safeHTML -}}</a>
-                </li>
-                <li class="post-copyright-license">
-                    <strong>版权声明：</strong>本站所有文章除特别声明外，均采用 <a href="{{ .Site.Params.footer.license }}" target="_blank" title="CC BY-NC-ND 4.0">{{ T "license" }}</a> 转载请注明来自 <a href="{{ $.Site.Author.link | default .Site.Home.RelPermalink }}" target="_blank">{{ T "penname" }}</a>
-                </li>
-            </ul>
+            <div id="copyright-container">
+                <ul class="post-copyright">
+                    <li class="post-copyright-author">
+                        <strong>{{- T "articleAuthor" -}}：</strong><a href="{{ $.Site.Author.link | default .Site.Home.RelPermalink }}" target="_blank">{{ T "penname" }}</a>
+                    </li>
+                    <li class="post-copyright-link">
+                        <strong>{{- T "articleLink" -}}：</strong><a href="#" target="_blank" title="{{ .Title }}">{{- .Permalink | safeHTML -}}</a>
+                    </li>
+                    <li class="post-copyright-license">
+                        <strong>{{- T "copyRight" -}}：</strong>
+                        {{- $prestr := printf `<a href="{{ .Site.Params.footer.license }}" target="_blank" title="CC BY-NC-ND 4.0">%v</a>` ( T "license" ) -}}
+                        {{- $laststr := printf `<a href="{{ $.Site.Author.link | default .Site.Home.RelPermalink }}" target="_blank">%v</a>` ( T "penname" ) -}}
+                    {{- dict "preCopyRight" $prestr "afterCopyRight" $laststr | T "copyRightMsg" | safeHTML }}
+
+                    </li>
+                </ul>
+            </div>
+
         </div>
+
+{{- /* 引入文章界面的JS */ -}}
+{{- $fingerprint := .Scratch.Get "fingerprint" -}}
+{{- $source := ( resources.Get "js/post-single.js" ) -}}
+{{- dict "Source" $source "Fingerprint" $fingerprint | dict "Scratch" $.Scratch "Data" | partial "scratch/script.html" -}}
+{{- range (.Scratch.Get "this").script -}}
+    {{- partial "plugin/script.html" . -}}
+{{- end -}}
+{{- .Scratch.Delete "this" -}}
 
         {{- /* Footer */ -}}
         {{- partial "single/footer.html" . -}}

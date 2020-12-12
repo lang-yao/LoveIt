@@ -33,7 +33,7 @@
                     {{- /* MultiMenus */ -}}
                     {{ if .HasChildren }}
                         <div class="dropdown menu-item">
-                          <a class="btn" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ .Name }}</a>
+                          <a class="btn" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{- .Pre | safeHTML }}{{ .Name }}{{ .Post | safeHTML -}}</a>
                           <div class="dropdown-menu" style="display: none;">
                             {{ range .Children }}
                                 {{- $url := .URL | relLangURL -}}
@@ -49,9 +49,7 @@
                         {{- with .Page -}}
                             {{- $url = .RelPermalink -}}
                         {{- end -}}
-                        <a class="menu-item{{ if $.IsMenuCurrent `main` . | or ($.HasMenuCurrent `main` .) | or (eq $.RelPermalink $url) }} active {{ end }}" href="{{ $url }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>
-                            {{- .Pre | safeHTML }}{{ .Name }}{{ .Post | safeHTML -}}
-                        </a>
+                        <a class="menu-item{{ if $.IsMenuCurrent `main` . | or ($.HasMenuCurrent `main` .) | or (eq $.RelPermalink $url) }} active {{ end }}" href="{{ $url }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>                            {{- .Pre | safeHTML }}{{ .Name }}{{ .Post | safeHTML -}}</a>
                     {{ end }}
                 {{- end -}}
                 {{- if .Site.Menus.main -}}
@@ -160,6 +158,33 @@
                     </a>
                 </div>
             {{- end -}}
+            {{- range .Site.Menus.main -}}
+
+            {{- /* MultiMenus */ -}}
+            {{ if .HasChildren }}
+                <div class="dropdown menu-item">
+                  <a class="btn" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ .Name }}</a>
+                  <div class="dropdown-menu dropdown-menu-mobile" style="display: none">
+                    {{ range .Children }}
+                        {{- $url := .URL | relLangURL -}}
+                        {{- with .Page -}}
+                            {{- $url = .RelPermalink -}}
+                        {{- end -}}
+                        <a class="dropdown-item" href="{{ $url }}" {{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>{{- .Pre | safeHTML }} {{ .Name }} {{ .Post | safeHTML -}}</a>
+                    {{ end }}
+                  </div>
+                </div>                       
+            {{ else }}
+                {{- $url := .URL | relLangURL -}}
+                {{- with .Page -}}
+                    {{- $url = .RelPermalink -}}
+                {{- end -}}
+                <a class="menu-item" href="{{ $url }}" title="{{ .Title }}"{{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>
+                    {{- .Pre | safeHTML }}{{ .Name }}{{ .Post | safeHTML -}}
+                </a>
+            {{ end }}
+            {{- end -}}
+           <!--  
             {{- $currentPage := . -}}
             {{- range .Site.Menus.main -}}
                 {{- $url := .URL | relLangURL -}}
@@ -169,12 +194,17 @@
                 <a class="menu-item" href="{{ $url }}" title="{{ .Title }}"{{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>
                     {{- .Pre | safeHTML }}{{ .Name }}{{ .Post | safeHTML -}}
                 </a>
-            {{- end -}}
+            {{- end -}} -->
             <a href="javascript:void(0);" class="menu-item theme-switch" title="{{ T "switchTheme" }}">
                 <i class="fas fa-adjust fa-fw"></i>
             </a>
             {{- if .Site.IsMultiLingual -}}
-                <a href="javascript:void(0);" class="menu-item" title="{{ T "selectLanguage" }}">
+                    {{- /* change languages */ -}}
+                        {{ range where .AllTranslations ".Lang" "ne" $.Lang }}
+                            <a href="{{ .RelPermalink }}" class="menu-item " title="{{ .Language.LanguageName }}"><i class="fas fa-language fa-fw"></i>
+                        </a>
+                    {{ end }}
+                <!-- <a href="javascript:void(0);" class="menu-item" title="{{ T "selectLanguage" }}">
                     {{- .Language.LanguageName -}}
                     <i class="fas fa-chevron-right fa-fw"></i>
                     <select class="language-select" onchange="location = this.value;">
@@ -194,7 +224,7 @@
                             {{- end -}}
                         {{- end -}}
                     </select>
-                </a>
+                </a> -->
             {{- end -}}
         </div>
     </div>

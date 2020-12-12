@@ -215,3 +215,44 @@ other = "运行 time 天"
 other = "共 {{ .Nums }} 篇文章"
 
 # === _default/section.html ===
+
+# === posts/single.html ===
+[articleEnd]
+other = " 完 "
+
+[seeAlso]
+other = "相关文章"
+
+[thanksSponsor]
+other = "感谢支持"
+
+[tips]
+other = "赞赏"
+
+[weichatTip]
+other = "微信赞赏"
+
+[aliTip]
+other = "支付宝赞赏"
+
+[articleAuthor]
+other = "文章作者"
+
+[articleLink]
+other = "文章链接"
+
+[copyRight]
+other = "版权声明"
+
+[copyRightMsg]
+other = "本站所有文章除特别声明外，均采用 {{ .preCopyRight }}  转载请注明来自 {{ .afterCopyRight }}"
+# === posts/single.html ===
+
+# === layouts/memories.html ===
+[memories]
+other = "记忆"
+
+[memory]
+other = "记忆"
+
+# === layouts/memories.html ===

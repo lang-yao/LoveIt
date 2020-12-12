@@ -208,3 +208,47 @@ other = "Almost time days."
 # === _default/section.html ===
 [totalPageNums]
 other = " {{ .Nums }} articles"
+
+# === _default/section.html ===
+
+
+# === posts/single.html ===
+[articleEnd]
+other = " End "
+
+[seeAlso]
+other = "See Also"
+
+[thanksSponsor]
+other = "Thanks for sponsor"
+
+[tips]
+other = "Tip"
+
+[weichatTip]
+other = "WeiChat Tip"
+
+[aliTip]
+other = "ALi Tip"
+
+[articleAuthor]
+other = "Author"
+
+[articleLink]
+other = "Link"
+
+[copyRight]
+other = "Copyright"
+
+[copyRightMsg]
+other = "All articles on this site use {{ .preCopyRight }} unless otherwise stated, please indicate that they are from {{ .afterCopyRight }} if you gonna copy it."
+# === posts/single.html ===
+
+# === layouts/memories.html ===
+[memories]
+other = "Memory"
+
+[memory]
+other = "Memory"
+
+# === layouts/memories.html ===
