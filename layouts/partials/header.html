@@ -163,7 +163,7 @@
             {{- /* MultiMenus */ -}}
             {{ if .HasChildren }}
                 <div class="dropdown menu-item">
-                  <a class="btn" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ .Name }}</a>
+                  <a class="btn" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{- .Pre | safeHTML }}{{ .Name }}{{ .Post | safeHTML -}}</a>
                   <div class="dropdown-menu dropdown-menu-mobile" style="display: none">
                     {{ range .Children }}
                         {{- $url := .URL | relLangURL -}}

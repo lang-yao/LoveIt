@@ -8,6 +8,15 @@
 {{- range (.Scratch.Get "this").style -}}
     {{- partial "plugin/style.html" . -}}
 {{- end -}}
+
+{{- /* 引入文章界面的JS */ -}}
+{{- $cdn := .Scratch.Get "cdn" | default dict -}}
+{{- $fingerprint := .Scratch.Get "fingerprint" -}}
+{{- $source := $cdn.jqueryJS | default ( resources.Get "js/jquery.min.js" ) -}}
+{{- dict "Source" $source "Fingerprint" $fingerprint | dict "Scratch" $.Scratch "Data" | partial "scratch/script.html" -}}
+{{- range (.Scratch.Get "this").script -}}
+    {{- partial "plugin/script.html" . -}}
+{{- end -}}
 {{- .Scratch.Delete "this" -}}
 
     {{- $params := .Scratch.Get "params" -}}
@@ -133,7 +142,6 @@
                     </div>
                 </div>
             </div>
-
             {{- /*copyright*/ -}}
             <div id="copyright-container">
                 <ul class="post-copyright">
@@ -145,10 +153,9 @@
                     </li>
                     <li class="post-copyright-license">
                         <strong>{{- T "copyRight" -}}：</strong>
-                        {{- $prestr := printf `<a href="{{ .Site.Params.footer.license }}" target="_blank" title="CC BY-NC-ND 4.0">%v</a>` ( T "license" ) -}}
-                        {{- $laststr := printf `<a href="{{ $.Site.Author.link | default .Site.Home.RelPermalink }}" target="_blank">%v</a>` ( T "penname" ) -}}
+                        {{- $prestr := printf `<a href="%v" target="_blank" title="CC BY-NC-ND 4.0">%v</a>` .Site.Params.footer.license ( T "license" ) -}}
+                        {{- $laststr := printf `<a href="%v" target="_blank">%v</a>` ($.Site.Author.link | default .Site.Home.RelPermalink) ( T "penname" ) -}}
                     {{- dict "preCopyRight" $prestr "afterCopyRight" $laststr | T "copyRightMsg" | safeHTML }}
-
                     </li>
                 </ul>
             </div>
