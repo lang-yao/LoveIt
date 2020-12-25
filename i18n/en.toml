@@ -252,3 +252,9 @@ other = "Memory"
 other = "Memory"
 
 # === layouts/memories.html ===
+
+# === layouts/booklist.html ===
+[booklist]
+other = "Book List"
+
+# === layouts/booklist.html ===
