@@ -32,7 +32,7 @@
 
                     {{- /* MultiMenus */ -}}
                     {{ if .HasChildren }}
-                        <div class="dropdown menu-item">
+                        <div class="dropdown menu-item" style="display: inline;">
                           <a class="btn" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{- .Pre | safeHTML }}{{ .Name }}{{ .Post | safeHTML -}}</a>
                           <div class="dropdown-menu" style="display: none;">
                             {{ range .Children }}
