@@ -65,6 +65,29 @@
                         {{- dict "Categories" . | T "includedInCategories" | safeHTML -}}
                     </span>
                 {{- end -}}
+
+                {{/* add homepage taxonomy */}}
+                {{- $memories := slice -}}
+                {{- range .Params.memories -}}
+                    {{- $category := partialCached "function/path.html" . . | printf "/memories/%v" | $.Site.GetPage -}}
+                    {{- $memories = $memories | append (printf `<a href="%v"><i class="fas fa-database fa-fw"></i>%v</a>` $category.RelPermalink $category.Title) -}}
+                {{- end -}}
+                {{- with delimit $memories "&nbsp;" -}}
+                    &nbsp;<span class="post-category">
+                        {{- . | safeHTML -}}
+                    </span>
+                {{- end -}}
+        
+                {{- $booklist := slice -}}
+                {{- range .Params.booklist -}}
+                    {{- $category := partialCached "function/path.html" . . | printf "/booklist/%v" | $.Site.GetPage -}}
+                    {{- $booklist = $booklist | append (printf `<a href="%v"><i class="fas fa-file-alt fa-fw"></i>%v</a>` $category.RelPermalink $category.Title) -}}
+                {{- end -}}
+                {{- with delimit $booklist "&nbsp;" -}}
+                    &nbsp;<span class="post-category">
+                        {{- . | safeHTML -}}
+                    </span>
+                {{- end -}}
             </div>
             <div class="post-meta-line">
                 {{- with .Site.Params.dateformat | default "2006-01-02" | .PublishDate.Format -}}

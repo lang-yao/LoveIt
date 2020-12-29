@@ -24,7 +24,7 @@
 
     {{- /* Meta */ -}}
     <div class="post-meta">
-        {{- $author := $params.author | default .Site.Author.name | default (T "author") -}}
+        {{- $author := $params.author | default (T "penname") | default .Site.Author.name | default (T "author") -}}
         {{- $authorLink := $params.authorlink | default .Site.Author.link | default .Site.Home.RelPermalink -}}
         <span class="post-author">
             {{- $options := dict "Class" "author" "Destination" $authorLink "Title" "Author" "Rel" "author" "Icon" (dict "Class" "fas fa-user-circle fa-fw") "Content" $author -}}
@@ -45,6 +45,29 @@
         {{- with delimit $categories "&nbsp;" -}}
             &nbsp;<span class="post-category">
                 {{- dict "Categories" . | T "includedInCategories" | safeHTML -}}
+            </span>
+        {{- end -}}
+        
+        {{/* add homepage taxonomy */}}
+        {{- $memories := slice -}}
+        {{- range .Params.memories -}}
+            {{- $category := partialCached "function/path.html" . . | printf "/memories/%v" | $.Site.GetPage -}}
+            {{- $memories = $memories | append (printf `<a href="%v"><i class="fas fa-database fa-fw"></i>%v</a>` $category.RelPermalink $category.Title) -}}
+        {{- end -}}
+        {{- with delimit $memories "&nbsp;" -}}
+            &nbsp;<span class="post-category">
+                {{- . | safeHTML -}}
+            </span>
+        {{- end -}}
+
+        {{- $booklist := slice -}}
+        {{- range .Params.booklist -}}
+            {{- $category := partialCached "function/path.html" . . | printf "/booklist/%v" | $.Site.GetPage -}}
+            {{- $booklist = $booklist | append (printf `<a href="%v"><i class="fas fa-file-alt fa-fw"></i>%v</a>` $category.RelPermalink $category.Title) -}}
+        {{- end -}}
+        {{- with delimit $booklist "&nbsp;" -}}
+            &nbsp;<span class="post-category">
+                {{- . | safeHTML -}}
             </span>
         {{- end -}}
     </div>
