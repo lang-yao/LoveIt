@@ -510,7 +510,7 @@ rss:
   Icon:
     Class: fas fa-rss fa-fw
 
-# 064: RSS
+# 064: wechat
 wechat:
   Weight: 2
   Title: 公众号
