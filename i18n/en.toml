@@ -241,7 +241,7 @@ other = "Link"
 other = "Copyright"
 
 [copyRightMsg]
-other = "All articles on this site use {{ .preCopyRight }} unless otherwise stated, please indicate that they are from {{ .afterCopyRight }} if you gonna copy it."
+other = "All articles on this site use {{ .preCopyRight }} unless otherwise stated. Please indicate that they are from {{ .afterCopyRight }} if you will copy it."
 # === posts/single.html ===
 
 # === layouts/memories.html ===
